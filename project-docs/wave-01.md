@@ -21,11 +21,18 @@ Read through the code in `App.jsx`, `TaskList.jsx` and `Task.jsx` and their styl
 1. The `Task` component uses destructuring to read in the props `const Task = ({ id, title, isComplete }) => {...`
     - How would the code change if `{id, title, isComplete}` were replaced with `props`?
     - Consider making this change and the subsequent necessary changes through the rest of the component to deepen your understanding of the code.
-1. What `props` does `TaskList` have? Where do they come from?
-1. Where is the function `getTaskListJSX` called in `TaskList`?
-    - How would the code change without this helper function?
-1. What component is `TASKS` passed to in `App`?
-    - How does the component pass `TASKS`?
-    - What element is the component wrapped in?
+1. What `props` does `TaskList` have? Where do they come from? // id, title, isComplete from the parent TASK in App
+1. Where is the function `getTaskListJSX` called in `TaskList`? //in the return when it renders
+    - How would the code change without this helper function? //const getTaskList = tasks.map((task) => {
+        <Task
+        key={task.id}
+        id={task.id}
+        title={task.title}
+        isComplete={task.isComplete}
+    />
+  
+2. What component is `TASKS` passed to in `App`? //TaskList
+    - How does the component pass `TASKS`?  // as an argument to props 
+    - What element is the component wrapped in?  // div
 
 The suggestions above should give you a strong foundation for working with Task List Front End. As time allows, follow your curiosity to explore more of the code and features.
