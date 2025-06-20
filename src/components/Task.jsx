@@ -3,8 +3,8 @@ import PropTypes from 'prop-types';
 
 import './Task.css';
 
-const Task = ({ id, title, isComplete, onToggle, onDelete }) => {
-  const buttonClass = isComplete ? 'tasks__item__toggle--completed'
+const Task = ({ id, title, is_complete, onToggle, onDelete }) => {
+  const buttonClass = is_complete ? 'tasks__item__toggle--completed'
     : 'tasks__item__toggle--incompleted';
 
   return (
@@ -32,7 +32,7 @@ const Task = ({ id, title, isComplete, onToggle, onDelete }) => {
 Task.propTypes = {
   id: PropTypes.number.isRequired,
   title: PropTypes.string.isRequired,
-  isComplete: PropTypes.bool.isRequired,
+  is_complete: PropTypes.bool.isRequired,
   onToggle: PropTypes.func.isRequired,
   onDelete: PropTypes.func.isRequired,
 };

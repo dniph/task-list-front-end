@@ -1,38 +1,50 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import axios from 'axios';
 import TaskList from './components/TaskList.jsx';
 import './App.css';
 
-const TASKS = [
-  {
-    id: 1,
-    title: 'Mow the lawn',
-    isComplete: false,
-  },
-  {
-    id: 2,
-    title: 'Cook Pasta',
-    isComplete: true,
-  },
-];
+const API = 'http://localhost:5000';
 
 const App = () => {
-  const [taskData, setTaskData] = useState(TASKS);
-  // cHANGES STATE 
+  const [taskData, setTaskData] = useState([]);
+
+  useEffect(() => {
+    axios.get(`${API}/tasks`)
+      .then((response) => {
+        setTaskData(response.data);
+      })
+      .catch((error) => {
+        console.error('Error fetching tasks:', error);
+      });
+  }, []);
+
   const toggleTaskComplete = (id) => {
-    const updatedTasks = taskData.map((task) => {
-      if (task.id === id) {
-        return { ...task, isComplete: !task.isComplete };
-      } else {
-        return task;
-      }
-    });
-    setTaskData(updatedTasks);
+    const task = taskData.find((t) => t.id === id);
+    const endpoint = task.is_complete
+      ? `${API}/tasks/${id}/mark_incomplete`
+      : `${API}/tasks/${id}/mark_complete`;
+
+    axios.patch(endpoint)
+      .then(() => {
+        const updatedTasks = taskData.map((t) =>
+          t.id === id ? { ...t, is_complete: !t.is_complete } : t
+        );
+        setTaskData(updatedTasks);
+      })
+      .catch((error) => {
+        console.error('Error toggling task complete:', error);
+      });
   };
 
-  // DELETE THE TASK
   const deleteTask = (id) => {
-    const filteredTasks = taskData.filter((task) => task.id !== id);
-    setTaskData(filteredTasks);
+    axios.delete(`${API}/tasks/${id}`)
+      .then(() => {
+        const filteredTasks = taskData.filter((task) => task.id !== id);
+        setTaskData(filteredTasks);
+      })
+      .catch((error) => {
+        console.error('Error deleting task:', error);
+      });
   };
 
   return (
@@ -41,9 +53,11 @@ const App = () => {
         <h1>Ada&apos;s Task List</h1>
       </header>
       <main>
-        <div>{<TaskList tasks={taskData}
-          onToggle={toggleTaskComplete} 
-          onDelete={deleteTask} />}</div>
+        <TaskList
+          tasks={taskData}
+          onToggle={toggleTaskComplete}
+          onDelete={deleteTask}
+        />
       </main>
     </div>
   );
